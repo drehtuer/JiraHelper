@@ -3,6 +3,7 @@ Unit test for jirahelper.py
 """
 import sys
 import unittest
+import settings
 import jirahelper
 
 
@@ -15,17 +16,31 @@ class TestJirahelperMethods(unittest.TestCase):
         """
         Test jirahelper.parse_args(argv)
         """
-        server='testserver'
-        user='testuser'
-        password='testpass'
         args = jirahelper.parse_args(
                 [
                     sys.argv[0],
-                    '--server', server,
-                    '--user', user,
-                    '--password', password
+                    '--server', settings.SERVER,
+                    '--user', settings.USER,
+                    '--token', settings.TOKEN,
+                    '--test'
                 ]
         )
-        self.assertEqual(args.server, server)
-        self.assertEqual(args.user, user)
-        self.assertEqual(args.password, password)
+        self.assertEqual(args.server, settings.SERVER)
+        self.assertEqual(args.user, settings.USER)
+        self.assertEqual(args.token, settings.TOKEN)
+
+
+    def test_main(self):
+        """
+        Test jirahelper.parse_main(argv)
+        """
+        result = jirahelper.main(
+                [
+                    sys.argv[0],
+                    '--server', settings.SERVER,
+                    '--user', settings.USER,
+                    '--token', settings.TOKEN,
+                    '--test'
+                ]
+        )
+        self.assertEqual(result, 1)

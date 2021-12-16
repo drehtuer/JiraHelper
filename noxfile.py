@@ -70,6 +70,10 @@ def lint(session):
     session.install(
         'pylint'
     )
+    session.install(
+            '-r',
+            'requirements.txt'
+    )
     session.run(
         'pylint',
             'src',
