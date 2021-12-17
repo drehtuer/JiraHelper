@@ -45,7 +45,6 @@ class TestJiraHelperJiraHelperMethods(unittest.TestCase):
                 settings.TEST_QUERY_JQL,
                 settings.TEST_QUERY_FIELDS
         )
-        print(result)
         for row in result:
             for field in settings.TEST_QUERY_FIELDS:
                 self.assertIn(field, row)
@@ -60,6 +59,26 @@ class TestJiraHelperJiraHelperMethods(unittest.TestCase):
                 settings.TEST_WORKLOG_TIME,
                 settings.TEST_WORKLOG_COMMENT
         )
-        print(worklog)
         self.assertEqual(worklog['time'], settings.TEST_WORKLOG_TIME)
         self.assertEqual(worklog['comment'], settings.TEST_WORKLOG_COMMENT)
+
+
+    def test_update(self):
+        """
+        Test JiraHelper.update(data)
+        """
+        results = [
+                {
+                    'key': 'PLN-1',
+                    'summary': 'Basic features',
+                    'status': 'Done'
+                },
+                {
+                    'key': 'PLN-2',
+                    'summary': 'Advanced features',
+                    'status': 'New'
+                }
+        ]
+        self.assertTrue(self._jira.update(
+                results
+        ))

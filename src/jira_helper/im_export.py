@@ -107,3 +107,13 @@ def import_query(filename):
     """
     work_book = load_workbook(filename = filename)
     work_sheet = work_book.active
+
+    issues = []
+
+    for row in work_sheet.iter_rows(min_row=2):
+        entries = {}
+        for i, entry in enumerate(row):
+            entries[work_sheet[1][i].value] = entry.value
+        issues.append(entries)
+
+    return issues

@@ -49,6 +49,11 @@ def parse_args(argv):
             help='JIRA search (JQL)'
     )
     group_action.add_argument(
+            '--update',
+            action='store_true',
+            help='Update by parsing an .xslx file'
+    )
+    group_action.add_argument(
             '--worklog',
             action='store_true',
             help='Log time for an issue'
@@ -103,6 +108,7 @@ def parse_args(argv):
     group_im_export = parser.add_argument_group('Im-/Export')
     group_im_export.add_argument(
             '--import',
+            dest='import_filename',
             type=argparse.FileType('r'),
             help='Import .xslx'
     )
@@ -141,6 +147,13 @@ def main(argv):
                     args.server,
                     args.export
             )
+    elif args.update and args.import_filename:
+        data = im_export.import_query(
+                args.filename
+        )
+        jira.update(
+                data
+        )
     elif args.worklog:
         jira.worklog(
                 args.issue,

@@ -72,3 +72,13 @@ class TestJiraHelperImExportMethods(unittest.TestCase):
                         work_sheet.cell(row=i+1, column=j+1).value,
                         row[col]
                 )
+
+    def test_import_query(self):
+        """
+        Test import_query(filename)
+        """
+        filename = 'test_result.xlsx'
+
+        result = im_export.import_query(filename)
+
+        self.assertIsNotNone(result)

@@ -3,6 +3,13 @@ JIRA wrapper class
 """
 import jira
 
+# Some fields cannot be updated, but must be handled differently,
+# e.g. via a transition.
+FIELDS_NO_UPDATE = [
+        'key',
+        'status'
+]
+
 
 class JiraHelper():
     """
@@ -65,6 +72,29 @@ class JiraHelper():
                 comment=comment
         )
         return self._parse_worklog(worklog.raw)
+
+
+    def update(self, results):
+        """
+        Update JIRA from data
+        """
+        new_results = []
+        try:
+            for result in results:
+                if result['key'] or result['key'] == '':
+                    print(f'Updating issue \'{result["key"]}\' ...')
+                    issue = self._jira.issue(result['key'])
+                    pop_fields = [item for item in result if item in FIELDS_NO_UPDATE]
+                    for field in pop_fields:
+                        result.pop(field)
+                    new_results.append(issue.update(
+                            fields=result,
+                            notify=True
+                    ))
+        except jira.exceptions.JIRAError as exception:
+            print(exception)
+            return False
+        return True
 
 
     @staticmethod
